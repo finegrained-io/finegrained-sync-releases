@@ -31,6 +31,16 @@ finegrained-sync-linux.tar.gz
 SHA256SUMS
 ~~~
 
+## Important: current installer trust status
+
+Current release installers are unsigned. They are not yet Developer ID signed
+or notarized on macOS, and the Windows MSI is not Authenticode signed.
+Accordingly, macOS Gatekeeper, Microsoft Defender SmartScreen, and browser
+download protection may warn about them or prevent the default open/download
+flow. Continue only when your organization approves the installation, you
+downloaded the installer from this repository's release page, and you have
+verified its SHA-256 checksum below.
+
 Download the matching SHA256SUMS file from the same release and verify the
 specific installer before opening it:
 
@@ -73,6 +83,10 @@ scoped credential for this computer.
 2. Open the disk image and double-click **Finegrained Sync Installer**.
    The installer works only for the signed-in macOS user and does not request
    administrator access.
+   If macOS says the installer cannot be opened, leave the disk image open,
+   open **System Settings → Privacy & Security**, scroll to **Security**, and
+   select **Open Anyway** for Finegrained Sync Installer. Authenticate when
+   asked, then select **Open** in the confirmation dialog.
 3. Enter your workspace's HTTPS URL and complete the browser sign-in when
    prompted. If you defer sign-in, open a new Terminal window and run:
 
@@ -97,19 +111,22 @@ Keychain.
 ### Current macOS trust status
 
 Current macOS releases are not yet Developer ID signed or notarized. Gatekeeper
-may warn before opening the installer. Continue only if your organization
-approves the installation, you downloaded it from this repository's release
-page, and you verified its checksum. Do not weaken macOS security controls to
-install the software.
+may warn before opening the installer. Follow the **Open Anyway** steps above
+only after completing the checksum and authorization checks.
 
 ## Windows installation
 
 1. Download finegrained-sync-windows.msi and SHA256SUMS from the release page,
    then compare the SHA-256 hash as described above.
-2. Run the MSI. It installs only for the current Windows user, then offers to
+2. If your browser warns about the download, select **Keep**, then **Keep
+   anyway** if it is offered. If Windows shows **Windows protected your PC**
+   when you run the MSI, select **More info → Run anyway**. Do this only after
+   you have verified the checksum and your organization has approved the
+   installation.
+3. Run the MSI. It installs only for the current Windows user, then offers to
    connect the machine. Enter the workspace's HTTPS URL and complete the
    browser sign-in.
-3. If you postpone sign-in, open **Finegrained Sync Setup** from the Start
+4. If you postpone sign-in, open **Finegrained Sync Setup** from the Start
    menu. You can also sign in from PowerShell:
 
    ~~~powershell
@@ -117,7 +134,7 @@ install the software.
    & $fg login -tenant https://YOUR-TENANT-URL
    ~~~
 
-4. Confirm the installation:
+5. Confirm the installation:
 
    ~~~powershell
    $fg = "$env:LOCALAPPDATA\Finegrained\Sync\bin\finegrained-sync.exe"
@@ -134,10 +151,11 @@ launcher. Windows on ARM can run this x64 release through Windows emulation.
 ### Current Windows trust status
 
 Current Windows releases are not yet Authenticode signed. Windows may show a
-publisher or reputation warning. Do not disable Windows security controls or
-bypass a malware detection. If Edge reports **Couldn't download — Virus
-detected**, obtain the exact detection name from **Windows Security → Protection
-history** and contact Finegrained.
+publisher or reputation warning; follow the **Keep anyway** and **Run anyway**
+steps above only after completing the checksum and authorization checks. Do
+not disable Windows security controls. If Edge reports **Couldn't download —
+Virus detected**, obtain the exact detection name from **Windows Security →
+Protection history** and contact Finegrained.
 
 ## Linux installation
 
