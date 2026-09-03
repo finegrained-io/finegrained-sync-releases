@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "tag": "v0.2.0",
+  "released_at": "2026-09-03T22:44:10Z",
+  "source": {
+    "repository": "finegrained-io/session-collector",
+    "commit": "2d1101a238700200988c3ce43259d39e0ff815eb"
+  },
+  "assets": {
+    "finegrained-sync-macos.dmg": {
+      "sha256": "89499263f93ee8c72a9e72f29ac887c47bf3dc67ec17e0f4bb18b7861e99ef82"
+    },
+    "finegrained-sync-windows.msi": {
+      "sha256": "024813acbc8bbe1d9c710c436ab71e6e4e507b1bc49884562e4a2d57c44fb256"
+    },
+    "finegrained-sync-linux.tar.gz": {
+      "sha256": "b9b681b29069a9168a21b2ebeb23b769d0c3ca9c895fe665676077b14dd5294a"
+    }
+  }
+}
