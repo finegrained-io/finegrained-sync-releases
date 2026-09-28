@@ -11,45 +11,42 @@ The installed command-line tool is named finegrained-sync.
 
 ## Release availability
 
-Finegrained Sync is available for macOS, Windows, and Linux. Download the
+Finegrained Sync 0.4.0 is available for macOS and Windows. Download the
 newest release only from this repository's
 [Releases](https://github.com/finegrained-io/finegrained-sync-releases/releases)
 page.
 
 | Platform | Current availability | Installation model |
 | --- | --- | --- |
-| macOS | Available | Per-user graphical .dmg installer and LaunchAgent |
-| Windows | Available | Per-user .msi installer and Startup-folder launcher |
-| Linux | Available | .tar.gz package with a systemd user service |
+| macOS | Available | Per-user graphical .dmg installer and LaunchAgents |
+| Windows | Available | Per-user .msi installer and Scheduled Tasks |
+| Linux | No current release asset | Not published with 0.4.0 |
 
-Each production release includes these stable asset names:
+The 0.4.0 release includes these stable asset names:
 
 ~~~text
 finegrained-sync-macos.dmg
 finegrained-sync-windows.msi
-finegrained-sync-linux.tar.gz
 SHA256SUMS
 ~~~
 
-## Important: current installer trust status
+## Current installer trust status
 
-Current release installers are unsigned. They are not yet Developer ID signed
-or notarized on macOS, and the Windows MSI is not Authenticode signed.
-Accordingly, macOS Gatekeeper, Microsoft Defender SmartScreen, and browser
-download protection may warn about them or prevent the default open/download
-flow. Continue only when your organization approves the installation, you
-downloaded the installer from this repository's release page, and you have
-verified its SHA-256 checksum below.
+Version 0.4.0 is the first signed release. Its macOS installer is Developer ID
+signed and notarized, with the notarization ticket stapled to the DMG. Its
+Windows MSI and bundled executables are Authenticode signed. The 0.3.3
+installers were unsigned prototypes. Download from the release page and
+verify the matching SHA-256 checksum before installing.
+
+Signed automatic-update metadata and platform archives for 0.4.0 are hosted
+at https://finegrained-io.github.io/finegrained-sync-releases/. An installed
+client activates an update only when its tenant approves that exact version.
 
 Download the matching SHA256SUMS file from the same release and verify the
 specific installer before opening it:
 
 ~~~sh
-# macOS
 grep ' finegrained-sync-macos.dmg$' SHA256SUMS | shasum -a 256 -c -
-
-# Linux
-grep ' finegrained-sync-linux.tar.gz$' SHA256SUMS | sha256sum -c -
 ~~~
 
 In PowerShell on Windows, compare the displayed hash with the
@@ -83,10 +80,8 @@ scoped credential for this computer.
 2. Open the disk image and double-click **Finegrained Sync Installer**.
    The installer works only for the signed-in macOS user and does not request
    administrator access.
-   If macOS says the installer cannot be opened, leave the disk image open,
-   open **System Settings → Privacy & Security**, scroll to **Security**, and
-   select **Open Anyway** for Finegrained Sync Installer. Authenticate when
-   asked, then select **Open** in the confirmation dialog.
+   If macOS rejects the installer, confirm that you downloaded version 0.4.0
+   from this repository and contact Finegrained with the warning text.
 3. Enter your workspace's HTTPS URL and complete the browser sign-in when
    prompted. If you defer sign-in, open a new Terminal window and run:
 
@@ -104,25 +99,24 @@ scoped credential for this computer.
 
 The installer places the CLI at
 ~/Library/Application Support/Finegrained/Sync/bin/finegrained-sync, adds that
-directory to standard shell profiles, and registers a per-user LaunchAgent.
+directory to standard shell profiles, and registers per-user collector and
+maintenance LaunchAgents.
 The login flow opens a browser and stores the device credential in your macOS
 Keychain.
-
-### Current macOS trust status
-
-Current macOS releases are not yet Developer ID signed or notarized. Gatekeeper
-may warn before opening the installer. Follow the **Open Anyway** steps above
-only after completing the checksum and authorization checks.
 
 ## Windows installation
 
 1. Download finegrained-sync-windows.msi and SHA256SUMS from the release page,
    then compare the SHA-256 hash as described above.
-2. If your browser warns about the download, select **Keep**, then **Keep
-   anyway** if it is offered. If Windows shows **Windows protected your PC**
-   when you run the MSI, select **More info → Run anyway**. Do this only after
-   you have verified the checksum and your organization has approved the
-   installation.
+2. Confirm that Windows reports a valid signature for the MSI:
+
+   ~~~powershell
+   (Get-AuthenticodeSignature .\finegrained-sync-windows.msi).Status
+   ~~~
+
+   If the browser or Windows blocks it, contact Finegrained with the warning
+   text after verifying the checksum; a signed release may still need time to
+   establish download reputation.
 3. Run the MSI. It installs only for the current Windows user, then offers to
    connect the machine. Enter the workspace's HTTPS URL and complete the
    browser sign-in.
@@ -145,46 +139,9 @@ only after completing the checksum and authorization checks.
 
 The MSI installs the CLI at
 %LOCALAPPDATA%\Finegrained\Sync\bin\finegrained-sync.exe, provides a
-**Finegrained Sync Setup** Start-menu shortcut, and creates a Startup-folder
-launcher. Windows on ARM can run this x64 release through Windows emulation.
-
-### Current Windows trust status
-
-Current Windows releases are not yet Authenticode signed. Windows may show a
-publisher or reputation warning; follow the **Keep anyway** and **Run anyway**
-steps above only after completing the checksum and authorization checks. Do
-not disable Windows security controls. If Edge reports **Couldn't download —
-Virus detected**, obtain the exact detection name from **Windows Security →
-Protection history** and contact Finegrained.
-
-## Linux installation
-
-The Linux package contains x64 and ARM64 binaries. It requires a Linux system
-with systemd --user and the secret-tool command from libsecret-tools for secure
-device-token storage.
-
-1. Download finegrained-sync-linux.tar.gz and SHA256SUMS, then verify the
-   checksum as described above.
-2. Extract the package and run its installer:
-
-   ~~~sh
-   tar -xzf finegrained-sync-linux.tar.gz
-   cd finegrained-sync-linux
-   ./install.sh
-   ~~~
-
-3. Open a new terminal (or ensure ~/.local/bin is on your PATH), then sign in
-   and confirm the installation:
-
-   ~~~sh
-   finegrained-sync login -tenant https://YOUR-TENANT-URL
-   finegrained-sync whoami
-   finegrained-sync status
-   ~~~
-
-The installer places the CLI at ~/.local/bin/finegrained-sync and enables a
-per-user finegrained-sync.service. Login starts it for the current session; it
-starts automatically after future sign-ins.
+**Finegrained Sync Setup** Start-menu shortcut, and registers per-user
+collector and maintenance Scheduled Tasks. Windows on ARM can run this x64
+release through Windows emulation.
 
 ## What Finegrained Sync can synchronize
 
@@ -233,7 +190,7 @@ from Windows Installed apps.
 
 | Symptom | What to do |
 | --- | --- |
-| command not found: finegrained-sync | On macOS, open a new Terminal window after installation. On Linux, add ~/.local/bin to your shell PATH. On Windows, invoke $env:LOCALAPPDATA\Finegrained\Sync\bin\finegrained-sync.exe from PowerShell. |
+| command not found: finegrained-sync | On macOS, open a new Terminal window after installation. On Windows, invoke $env:LOCALAPPDATA\Finegrained\Sync\bin\finegrained-sync.exe from PowerShell. |
 | Windows setup says Finegrained Sync could not be found | Reinstall the newest MSI, then run **Finegrained Sync Setup** from the Start menu. |
 | Browser sign-in does not finish | Run finegrained-sync login -tenant https://YOUR-TENANT-URL again and complete the browser sign-in. The tenant URL must use HTTPS. |
 | No data synchronizes after sign-in | Run finegrained-sync status and finegrained-sync doctor, then ask your administrator to confirm the tenant policy permits the intended synchronization. |
