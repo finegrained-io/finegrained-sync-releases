@@ -1,0 +1,17 @@
+{
+  "version": "0.4.0",
+  "tag": "v0.4.0",
+  "released_at": "2026-09-28T20:46:56Z",
+  "source": {
+    "repository": "finegrained-io/session-collector",
+    "commit": "f9f7694d4cc32ef25f10cf05fd279d06cc43172d"
+  },
+  "assets": {
+    "finegrained-sync-macos.dmg": {
+      "sha256": "824d11367e087f6eb77309de6550ff21eeb4dcc0740e24527afe8148970bbe68"
+    },
+    "finegrained-sync-windows.msi": {
+      "sha256": "3b190009190599ab9b66283e6653015b4b50087484870020647ff7b2893611c3"
+    }
+  }
+}
